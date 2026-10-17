@@ -11,7 +11,7 @@ four themes and live animated backgrounds.
 
 </div>
 
-> The interface is in **Russian**.
+> The interface is in **English** and **Russian** — it follows your browser language, and you can switch it in Settings → *Language*.
 
 ## Features
 
@@ -56,7 +56,7 @@ four themes and live animated backgrounds.
 Opera always shows its own start page first, so for a second you may see the default tiles. To avoid that:
 
 1. Open `opera://settings/onStartup` and choose **Open a specific page or set of pages**.
-2. Add the address of your dial — copy it in GX Dial: **Settings → Прочее → При запуске Opera → Копировать**.
+2. Add the address of your dial — copy it in GX Dial: **Settings → Other → When Opera starts → Copy**.
 3. If there is a switch like *Show the start page first*, turn it off.
 
 ### Updating

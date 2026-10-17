@@ -306,7 +306,7 @@ body[data-theme="neon"] .tools button { clip-path: var(--tick); background: rgba
 body[data-theme="neon"] .item.over { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 70%, transparent)); }
 body[data-theme="neon"] .item.over .card { padding: 2px; background: repeating-linear-gradient(-45deg, var(--accent) 0 8px, transparent 8px 16px); background-size: 22.63px 22.63px; animation: tape .7s linear infinite; }
 body[data-theme="neon"] .drop-label { inset: 2px; clip-path: var(--ch); background: rgba(11,10,16,.62); color: var(--accent); font: 700 12px var(--mono); letter-spacing: .16em; }
-body[data-theme="neon"] .drop-label .dl::before { content: "СЮДА"; }
+body[data-theme="neon"] .drop-label .dl::before { content: var(--t-here, "СЮДА"); }
 body[data-theme="neon"] .drop-label svg { animation: bob 1s ease-in-out infinite; }
 body[data-theme="neon"] .item.dragging { opacity: .25; filter: grayscale(1); }
 body[data-theme="neon"] .caption { font-weight: 600; }
@@ -416,7 +416,7 @@ body[data-theme="glass"] .item.over .ring { animation: ripple 1.6s cubic-bezier(
 body[data-theme="glass"] .item.over .ring + .ring { animation-delay: .8s; }
 body[data-theme="glass"] .item.over .card { transform: scale(.9); outline: 2px solid var(--accent); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 25%, transparent), 0 0 40px color-mix(in srgb, var(--accent) 55%, transparent); }
 body[data-theme="glass"] .drop-label { background: rgba(15,12,34,.55); color: #fff; font-weight: 800; font-size: 13px; }
-body[data-theme="glass"] .drop-label .dl::before { content: "Отпустите"; }
+body[data-theme="glass"] .drop-label .dl::before { content: var(--t-release, "Отпустите"); }
 body[data-theme="glass"] .drop-label svg { color: var(--accent); animation: bob 1.2s ease-in-out infinite; }
 body[data-theme="glass"] .item.dragging .card { opacity: .3; transform: scale(.94); }
 body[data-theme="glass"] .item.dragging .caption { opacity: .4; }
@@ -644,7 +644,7 @@ body[data-theme="neon"] .item.glitching { animation: glitch .4s steps(1) both; z
 
 /* бросаем плитку в папку */
 .item.into .drop-label { display: flex; }
-body .item.into .drop-label .dl::before { content: "В папку"; }
+body .item.into .drop-label .dl::before { content: var(--t-into, "В папку"); }
 .item.into .card { animation: gulp .9s var(--ease) infinite; }
 .item.into .fcell { transform: scale(.82); }
 @keyframes gulp { 50% { transform: scale(1.06); } }
@@ -678,7 +678,7 @@ body[data-theme="neon"] .item.folder.open .card { background: var(--accent); }
 body[data-theme="neon"] .item.folder.open { filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 55%, transparent)); }
 body[data-theme="neon"] .item.into { filter: drop-shadow(0 0 20px color-mix(in srgb, var(--accent) 75%, transparent)); }
 body[data-theme="neon"] .item.into .card { background: var(--accent); }
-body[data-theme="neon"] .item.into .drop-label .dl::before { content: "В ПАПКУ"; }
+body[data-theme="neon"] .item.into .drop-label .dl::before { content: var(--t-into-neon, "В ПАПКУ"); }
 body[data-theme="neon"] .fcount { font-family: var(--mono); }
 body[data-theme="neon"] .fcount::before { content: "["; } body[data-theme="neon"] .fcount::after { content: "]"; }
 body[data-theme="neon"] .folder-open { background: color-mix(in srgb, var(--accent) 5%, color-mix(in srgb, var(--tile) 85%, transparent)); border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent); }
@@ -801,8 +801,8 @@ body[data-theme="cards"] .tools button { border-radius: 6px; background: rgba(10
 /* место, куда положат карту: она переворачивается рубашкой вверх */
 body[data-theme="cards"] .item.over .card { transform: translateY(-4px); box-shadow: 0 0 0 2px var(--accent), 0 0 30px color-mix(in srgb, var(--accent) 35%, transparent), 0 14px 30px rgba(0,0,0,.6); }
 body[data-theme="cards"] .drop-label { inset: 5px; border-radius: calc(var(--radius) - 3px); background: var(--back); box-shadow: inset 0 0 0 4px var(--tile), inset 0 0 0 5px var(--accent); color: var(--accent); font: italic 600 15px var(--display); text-shadow: 0 1px 4px #000; animation: flipIn .35s var(--spring) both; }
-body[data-theme="cards"] .drop-label .dl::before { content: "Положить сюда"; }
-body[data-theme="cards"] .item.into .drop-label .dl::before { content: "В колоду"; }
+body[data-theme="cards"] .drop-label .dl::before { content: var(--t-place, "Положить сюда"); }
+body[data-theme="cards"] .item.into .drop-label .dl::before { content: var(--t-deck, "В колоду"); }
 body[data-theme="cards"] .item.dragging .card { opacity: .35; transform: rotate(3deg) scale(.96); }
 body[data-theme="cards"] .item.dragging .caption { opacity: .4; }
 body[data-theme="cards"] .card.add { padding: 0; background: transparent; box-shadow: none; border: 2px dashed color-mix(in srgb, var(--text) 28%, transparent); color: var(--muted); font-weight: 600; font-size: 13px; }

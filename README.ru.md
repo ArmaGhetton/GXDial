@@ -7,6 +7,8 @@
 
 [English version](README.md) · [Скачать](https://github.com/ArmaGhetton/GXDial/releases/latest) · [История версий](CHANGELOG.md)
 
+Интерфейс на **русском** и **английском** — язык выбирается по языку браузера, переключить можно в настройках → «Язык / Language».
+
 ![GX Dial — четыре темы с живыми фонами](docs/images/demo.gif)
 
 </div>

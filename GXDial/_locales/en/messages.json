@@ -1,0 +1,11 @@
+{
+  "name": {
+    "message": "GX Dial — customizable speed dial"
+  },
+  "description": {
+    "message": "Speed dial with sections, folders, custom tile images and four themes: Neon, Glass, Calm and Cards."
+  },
+  "action": {
+    "message": "Open GX Dial"
+  }
+}

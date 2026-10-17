@@ -8,7 +8,7 @@ const DEFAULTS = {
   theme: 'neon',
   cols: 5, w: 200, h: 116, gap: 20, radius: 14, fav: 20, font: 14, top: 110, secGap: 24,
   showTitles: true, ...THEMES.neon,
-  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null
+  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto'
 };
 const SIZE_KEYS = ['cols', 'w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'secGap'];
 const PX_KEYS = ['w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'blur', 'secGap'];
@@ -64,13 +64,14 @@ async function load() {
   const data = await chrome.storage.local.get(['settings', 'sections', 'tiles', 'bgImage']);
   S = { ...DEFAULTS, ...(data.settings || {}) };
   if (!THEMES[S.theme]) S.theme = 'neon';
+  applyLang(S.lang);
   S.fxv = { ...DEFAULTS.fxv, ...(S.fxv || {}) };
   // тема «Карты» стала чёрно-золотой: старые цвета этой темы меняем на новые
   if (S.theme === 'cards' && S.accent === '#c62f3b' && S.tile === '#f5f0e3' && S.bg === '#0e1630') Object.assign(S, THEMES.cards);
   if (Array.isArray(data.sections)) {
     sections = data.sections;
   } else {
-    sections = [{ id: uid(), name: 'Основное', collapsed: false, tiles: data.tiles || DEFAULT_TILES.slice() }];
+    sections = [{ id: uid(), name: L('Основное'), collapsed: false, tiles: data.tiles || DEFAULT_TILES.map(x => LANG === 'en' && x.url.includes('ru.wikipedia') ? { title: 'Wikipedia', url: 'https://en.wikipedia.org/' } : x) }];
     await chrome.storage.local.set({ sections });
     if (data.tiles) chrome.storage.local.remove('tiles');
   }
@@ -122,6 +123,7 @@ function applySettings() {
   b.classList.toggle('view-tabs', S.view === 'tabs');
   document.querySelectorAll('.theme-btn').forEach(x => x.classList.toggle('on', x.dataset.themePick === S.theme));
   document.querySelectorAll('[data-seg="view"] button').forEach(x => x.classList.toggle('on', x.dataset.val === S.view));
+  document.querySelectorAll('[data-seg="lang"] button').forEach(x => x.classList.toggle('on', x.dataset.val === (S.lang || 'auto')));
   syncFx();
 }
 const FX_NAMES = { neon: ['Горизонт', 'Соты', 'Гиперпрыжок'], glass: ['Пятна', 'Шёлк'], calm: ['Точки', 'Созвездия'], cards: ['Полёт', 'Масти', 'Веер'] };
@@ -138,7 +140,7 @@ function syncFx() {
     seg.style.gridTemplateColumns = `repeat(${names.length}, 1fr)`;
   }
   [...seg.children].forEach(b => {
-    b.textContent = names[+b.dataset.val];
+    b.textContent = L(names[+b.dataset.val]);
     b.classList.toggle('on', +b.dataset.val === v);
   });
   if (window.FX) FX.set(S.theme, on, v);
@@ -167,9 +169,9 @@ function iconBtn(cls, icon, label, text) {
   const b = el('button', cls);
   b.type = 'button';
   b.innerHTML = icon;
-  if (text) b.append(el('span', '', text));
-  b.setAttribute('aria-label', label);
-  b.title = label;
+  if (text) b.append(el('span', '', L(text)));
+  b.setAttribute('aria-label', L(label));
+  b.title = L(label);
   return b;
 }
 function placeholder(t) { return el('div', 'ph', hostOf(t.url)); }
@@ -269,7 +271,7 @@ function tileEl(loc, t, i) {
   const del = iconBtn('', IC.x, 'Удалить');
   del.onclick = e => {
     e.preventDefault();
-    if (confirm(`Удалить «${t.title || hostOf(t.url)}»?`)) { getList(loc.sec, loc.folder).splice(i, 1); saveSections(); render(); }
+    if (confirm(tf('delTile', t.title || hostOf(t.url)))) { getList(loc.sec, loc.folder).splice(i, 1); saveSections(); render(); }
   };
   tools.append(edit, del);
   card.append(tools);
@@ -352,7 +354,7 @@ function folderTileEl(s, f, i) {
   card.setAttribute('role', 'button');
   card.setAttribute('aria-expanded', open);
   card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFolder(s, f); } };
-  card.setAttribute('aria-label', `Папка «${f.name}», закладок: ${f.tiles.length}`);
+  card.setAttribute('aria-label', tf('folderAria', f.name, f.tiles.length));
   card.append(folderThumbs(f));
   const drop = el('span', 'drop-label');
   drop.innerHTML = IC.down;
@@ -417,7 +419,7 @@ function folderPanelEl(s, f, col) {
   const ic = el('span', 'ficon');
   ic.innerHTML = IC.folder;
   const title = el('h3', 'fo-title', f.name);
-  title.title = 'Дважды щёлкните, чтобы переименовать';
+  title.title = L('Дважды щёлкните, чтобы переименовать');
   title.ondblclick = () => startRename(title, f);
   const count = el('span', 'count', f.tiles.length);
   const line = el('div', 'sec-line');
@@ -441,8 +443,8 @@ function folderPanelEl(s, f, col) {
   const addCard = el('button', 'card add');
   addCard.type = 'button';
   addCard.innerHTML = IC.plus;
-  addCard.append(el('span', '', 'Добавить'));
-  addCard.setAttribute('aria-label', 'Добавить закладку в папку');
+  addCard.append(el('span', '', L('Добавить')));
+  addCard.setAttribute('aria-label', L('Добавить закладку в папку'));
   addCard.onclick = () => openEditor(loc, -1);
   addWrap.append(addCard);
   grid.append(addWrap);
@@ -479,7 +481,7 @@ function renameOpenFolder(f) {
   if (title) startRename(title, f);
 }
 function addFolder(s) {
-  const f = { type: 'folder', id: uid(), name: 'Новая папка', tiles: [] };
+  const f = { type: 'folder', id: uid(), name: L('Новая папка'), tiles: [] };
   s.tiles.push(f);
   openFolder(s, f);
   saveSections(); render();
@@ -487,7 +489,7 @@ function addFolder(s) {
 }
 function deleteFolder(s, f) {
   const n = f.tiles.length;
-  const msg = n ? `Удалить папку «${f.name}»? Закладки из неё (${n} шт.) останутся в разделе.` : `Удалить папку «${f.name}»?`;
+  const msg = tf('delFolder', f.name, n);
   if (!confirm(msg)) return;
   const idx = s.tiles.indexOf(f);
   s.tiles.splice(idx, 1, ...f.tiles);
@@ -600,7 +602,7 @@ function sectionEl(s, n) {
 
   const handle = el('span', 'handle');
   handle.innerHTML = IC.grip;
-  handle.title = 'Перетащите, чтобы поменять порядок разделов';
+  handle.title = L('Перетащите, чтобы поменять порядок разделов');
   handle.draggable = true;
   handle.addEventListener('dragstart', e => {
     drag = { type: 'sec', id: s.id };
@@ -617,7 +619,7 @@ function sectionEl(s, n) {
   const num = el('span', 'sec-num', String(n + 1).padStart(2, '0'));
 
   const title = el('h2', 'sec-title', s.name);
-  title.title = 'Дважды щёлкните, чтобы переименовать';
+  title.title = L('Дважды щёлкните, чтобы переименовать');
   title.ondblclick = () => startRename(title, s);
 
   const count = el('span', 'count', linksOf(s).length);
@@ -648,8 +650,8 @@ function sectionEl(s, n) {
   const addCard = el('button', 'card add');
   addCard.type = 'button';
   addCard.innerHTML = IC.plus;
-  addCard.append(el('span', '', 'Добавить'));
-  addCard.setAttribute('aria-label', 'Добавить закладку в этот раздел');
+  addCard.append(el('span', '', L('Добавить')));
+  addCard.setAttribute('aria-label', L('Добавить закладку в этот раздел'));
   addCard.onclick = () => openEditor(loc, -1);
   addWrap.append(addCard);
   nodes.push(addWrap);
@@ -683,7 +685,7 @@ function sectionEl(s, n) {
 
 function tabBar() {
   const bar = el('nav', 'tabs');
-  bar.setAttribute('aria-label', 'Разделы');
+  bar.setAttribute('aria-label', L('Разделы'));
   bar.append(el('span', 'tab-ind'));
   sections.forEach((s, n) => {
     const b = el('button', 'tab' + (s.id === S.active ? ' on' : ''));
@@ -716,9 +718,9 @@ function tabBar() {
     });
     bar.append(b);
   });
-  const add = el('button', 'tab add', '+ Раздел');
+  const add = el('button', 'tab add', L('+ Раздел'));
   add.type = 'button';
-  add.title = 'Новый раздел';
+  add.title = L('Новый раздел');
   add.onclick = addSection;
   bar.append(add);
   return bar;
@@ -775,7 +777,7 @@ function render() {
     const add = el('button', 'new-section');
     add.type = 'button';
     add.innerHTML = IC.plus;
-    add.append(el('span', '', 'Новый раздел'));
+    add.append(el('span', '', L('Новый раздел')));
     add.style.setProperty('--i', Math.min(sections.length, 5));
     add.onclick = addSection;
     root.append(add);
@@ -806,7 +808,7 @@ function startRename(title, s) {
   title.onblur = () => finish(true);
 }
 function addSection() {
-  const s = { id: uid(), name: 'Новый раздел', collapsed: false, tiles: [] };
+  const s = { id: uid(), name: L('Новый раздел'), collapsed: false, tiles: [] };
   sections.push(s);
   if (S.view === 'tabs') { S.active = s.id; saveSettings(); }
   saveSections(); render();
@@ -815,7 +817,7 @@ function addSection() {
 }
 function deleteSection(s) {
   const n = linksOf(s).length;
-  const msg = n ? `Удалить раздел «${s.name}» вместе с закладками (${n} шт.)?` : `Удалить раздел «${s.name}»?`;
+  const msg = tf('delSection', s.name, n);
   if (!confirm(msg)) return;
   sections = sections.filter(x => x !== s);
   saveSections(); render();
@@ -834,19 +836,19 @@ function setPreview() {
     const img = el('img');
     img.src = draftImage;
     img.style.objectFit = $('fFit').value;
-    img.onerror = () => { p.textContent = 'Не удалось загрузить картинку по ссылке'; };
+    img.onerror = () => { p.textContent = L('Не удалось загрузить картинку по ссылке'); };
     p.append(img);
   } else {
-    p.textContent = 'Нет изображения — на плитке будет адрес сайта';
+    p.textContent = L('Нет изображения — на плитке будет адрес сайта');
   }
 }
 function openEditor(loc, i) {
-  if (!sections.length) sections.push({ id: uid(), name: 'Основное', collapsed: false, tiles: [] });
+  if (!sections.length) sections.push({ id: uid(), name: L('Основное'), collapsed: false, tiles: [] });
   if (!loc || !getList(loc.sec, loc.folder)) loc = { sec: sections[0].id, folder: null };
   editLoc = loc;
   editIndex = i;
   const t = i < 0 ? null : getList(loc.sec, loc.folder)[i];
-  $('editTitle').textContent = t ? 'Изменить закладку' : 'Новая закладка';
+  $('editTitle').textContent = L(t ? 'Изменить закладку' : 'Новая закладка');
   $('fTitle').value = t ? t.title : '';
   $('fUrl').value = t ? t.url : '';
   const sel = $('fSec');
@@ -884,7 +886,7 @@ $('fImgClear').onclick = () => { draftImage = null; $('fImgUrl').value = ''; set
 $('editDlg').addEventListener('close', () => {
   if ($('editDlg').returnValue !== 'ok') return;
   const url = normalizeUrl($('fUrl').value);
-  try { new URL(url); } catch { alert('Некорректный адрес'); return; }
+  try { new URL(url); } catch { alert(L('Некорректный адрес')); return; }
   const item = { title: $('fTitle').value.trim(), url };
   if (draftImage) { item.image = draftImage; item.fit = $('fFit').value; }
   const [kind, sid, fid] = $('fSec').value.split(':');
@@ -956,6 +958,19 @@ document.querySelectorAll('[data-seg="view"] button').forEach(b => {
   };
 });
 
+document.querySelectorAll('[data-seg="lang"] button').forEach(b => {
+  b.onclick = () => {
+    if ((S.lang || 'auto') === b.dataset.val) return;
+    S.lang = b.dataset.val;
+    applyLang(S.lang);
+    // стандартные названия («Основное», «Новый раздел», «Новая папка») меняем на новый язык
+    const DEF = ['Основное', 'Новый раздел', 'Новая папка'];
+    const fix = x => { const k = DEF.find(r => r === x.name || EN[r] === x.name); if (k) x.name = L(k); };
+    sections.forEach(sec => { fix(sec); sec.tiles.forEach(f => f.type === 'folder' && fix(f)); });
+    applySettings(); saveSettings(); saveSections(); render();
+  };
+});
+
 document.querySelector('[data-seg="fxv"]').addEventListener('click', e => {
   const b = e.target.closest('button');
   if (!b) return;
@@ -995,14 +1010,14 @@ $('copyUrl').onclick = async () => {
   const btn = $('copyUrl');
   try { await navigator.clipboard.writeText($('dialUrl').value); }
   catch { $('dialUrl').select(); document.execCommand('copy'); }
-  btn.textContent = 'Скопировано ✓';
-  setTimeout(() => { btn.textContent = 'Копировать'; }, 1600);
+  btn.textContent = L('Скопировано ✓');
+  setTimeout(() => { btn.textContent = L('Копировать'); }, 1600);
 };
 $('openStartup').onclick = async () => {
   try { await chrome.tabs.create({ url: 'opera://settings/onStartup' }); }
   catch {
     try { await chrome.tabs.create({ url: 'chrome://settings/onStartup' }); }
-    catch { $('openStartup').textContent = 'Откройте вручную: opera://settings/onStartup'; }
+    catch { $('openStartup').textContent = L('Откройте вручную: opera://settings/onStartup'); }
   }
 };
 
@@ -1069,13 +1084,13 @@ $('importBtn').onclick = async () => {
       const links = deep(c).filter(b => web(b) && !known.has(b.url));
       if (!links.length) continue;
       let f = ensure().tiles.find(t => isFolder(t) && t.name === c.title);
-      if (!f) { f = { type: 'folder', id: uid(), name: c.title || 'Папка', tiles: [] }; target.tiles.push(f); }
+      if (!f) { f = { type: 'folder', id: uid(), name: c.title || L('Папка'), tiles: [] }; target.tiles.push(f); }
       links.forEach(b => { f.tiles.push({ title: b.title, url: b.url }); known.add(b.url); added++; });
     }
   }
   if (added && S.view === 'tabs') { S.active = target.id; saveSettings(); }
   saveSections(); render();
-  alert(added ? `Раздел «${target.name}»: добавлено закладок — ${added}` : 'Новых закладок в этой папке нет');
+  alert(added ? tf('imported', target.name, added) : L('Новых закладок в этой папке нет'));
 };
 
 load();

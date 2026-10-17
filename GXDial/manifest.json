@@ -1,11 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "GX Dial — настраиваемая экспресс-панель",
+  "name": "__MSG_name__",
   "short_name": "GX Dial",
-  "version": "2.7.2",
-  "description": "Экспресс-панель с разделами, папками, своими картинками плиток и четырьмя темами оформления: Неон, Стекло, Тишина и Карты.",
-  "permissions": ["storage", "unlimitedStorage", "tabs", "bookmarks", "favicon", "alarms"],
-  "background": { "service_worker": "background.js" },
-  "action": { "default_title": "Открыть GX Dial" },
-  "icons": { "128": "icon128.png" }
+  "version": "2.8.0",
+  "description": "__MSG_description__",
+  "default_locale": "en",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "bookmarks",
+    "favicon",
+    "alarms"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "__MSG_action__"
+  },
+  "icons": {
+    "128": "icon128.png"
+  }
 }
