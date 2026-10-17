@@ -17,6 +17,7 @@ four themes and live animated backgrounds.
 
 - **Sections** — group your bookmarks; show them as a list or as tabs. Rename, collapse, reorder by drag & drop.
 - **Folders inside sections** — a folder looks like a tile with a 2×2 preview and unfolds right under its row. Drop a tile onto a folder to put it inside.
+- **Search bar** — searches Google and your bookmarks at once: just start typing anywhere, matching tiles light up. Type an address to open it directly. Styled to match each theme.
 - **Drag & drop everywhere** — reorder tiles, move them between sections, folders and tabs.
 - **Your own images on tiles** — from your computer or by URL, *cover* or *contain*.
 - **Covers for tiles without an image** — the site address, a big glowing icon, the site's own color, a unique generated pattern or a giant letter. The color is taken from the site's icon; each site gets its own pattern.
@@ -38,6 +39,10 @@ four themes and live animated backgrounds.
 | ![Neon](docs/images/theme-neon.png) | ![Glass](docs/images/theme-glass.png) |
 | **Calm** | **Cards** |
 | ![Calm](docs/images/theme-calm.png) | ![Cards](docs/images/theme-cards.png) |
+
+### Search
+
+![Search](docs/images/search.png)
 
 ### Covers for tiles without an image
 

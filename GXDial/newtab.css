@@ -953,3 +953,102 @@ body .ph.cv.cv-mono { background: linear-gradient(160deg, color-mix(in srgb, var
 body[data-theme="neon"] .cover-btn, body[data-theme="neon"] .cvp { border-radius: 0; }
 .preview > .ph.cv { --h: 140px; width: 100%; height: 100%; }
 .preview:has(.cv) { padding: 0; }
+
+/* ===== Строка поиска ===== */
+.search { position: relative; z-index: 6; width: min(calc(var(--gridW) + 2 * var(--sp)), 720px); max-width: 100%; margin: 0 auto calc(var(--secGap) + 6px); transition: transform .55s var(--ease); }
+body.no-search .search { display: none; }
+body.intro .search { animation: rise .35s var(--ease) both; }
+.sbox { position: relative; display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px 0 18px; transition: background .25s, border-color .25s, box-shadow .3s; }
+.s-ico { color: var(--muted, currentColor); display: grid; place-items: center; transition: color .25s; }
+.search.focus .s-ico { color: var(--accent); }
+.s-pre { display: none; }
+#q { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; padding: 0; background: transparent; color: var(--text); font: inherit; font-size: 16px; caret-color: var(--accent); }
+#q::placeholder { color: var(--muted); opacity: .85; }
+.s-key { flex: none; min-width: 22px; height: 22px; display: grid; place-items: center; padding: 0 6px; font: 600 12px var(--mono, ui-monospace, monospace); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; transition: opacity .2s; }
+.search.focus .s-key, .search.has-q .s-key { opacity: 0; }
+/* список подсказок */
+.s-list { position: absolute; left: 0; right: 0; top: calc(100% + 8px); padding: 6px; background: var(--panel-solid, var(--panel-bg)); border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0,0,0,.45); animation: unfold .22s var(--ease); transform-origin: 50% 0; }
+.q-row { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; cursor: pointer; color: var(--text); transition: background .15s; }
+.q-row.on { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.q-ic { flex: none; width: 22px; height: 22px; display: grid; place-items: center; color: var(--muted); }
+.q-ic img { width: 18px; height: 18px; }
+.q-ic .letter { width: 18px; height: 18px; font-size: 11px; }
+.q-row.on .q-ic { color: var(--accent); }
+.q-tx { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+.q-tx b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.q-pre, .q-host { color: var(--muted); font-size: 13px; }
+.q-sec { flex: none; max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--muted); padding: 2px 8px; border: 1px solid var(--line); border-radius: 99px; }
+.q-enter { flex: none; font: 600 10px var(--mono, ui-monospace, monospace); color: var(--muted); padding: 2px 6px; border: 1px solid var(--line); border-radius: 5px; opacity: 0; }
+.q-row.on .q-enter { opacity: 1; }
+/* подсветка плиток во время поиска */
+body.searching .item[data-search] { transition: opacity .25s, filter .25s; }
+body.searching .item[data-search]:not(.hit) { opacity: .22; filter: saturate(.3); }
+body.searching .item.hit .card { box-shadow: 0 0 0 2px var(--accent), 0 0 24px color-mix(in srgb, var(--accent) 45%, transparent); }
+body[data-theme="glass"].panel-open .search, body[data-theme="calm"].panel-open .search, body[data-theme="cards"].panel-open .search { transform: translateX(-170px) scale(.86); transform-origin: 50% 0; }
+
+/* Неон: как командная строка — срезанные углы, акцентные уголки, приглашение «>» */
+body[data-theme="neon"] .sbox {
+  clip-path: var(--chs); border: 1px solid var(--line);
+  background:
+    linear-gradient(var(--accent), var(--accent)) left top / 12px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) left top / 2px 12px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right bottom / 12px 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) right bottom / 2px 12px no-repeat,
+    color-mix(in srgb, var(--tile) 78%, transparent);
+  backdrop-filter: blur(6px);
+}
+body[data-theme="neon"] .sbox::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); box-shadow: 0 0 12px var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
+body[data-theme="neon"] .search.focus .sbox::after { transform: scaleX(1); }
+body[data-theme="neon"] .s-ico { display: none; }
+body[data-theme="neon"] .s-pre { display: block; font: 700 16px var(--mono); color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+body[data-theme="neon"] .s-pre::before { content: ">"; }
+body[data-theme="neon"] #q { font: 500 15px var(--mono); letter-spacing: .02em; }
+body[data-theme="neon"] #q::placeholder { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+body[data-theme="neon"] .s-key { border-radius: 0; clip-path: var(--tick); }
+body[data-theme="neon"] .s-list { clip-path: var(--chs); border-radius: 0; }
+body[data-theme="neon"] .q-row { font-family: var(--mono); }
+body[data-theme="neon"] .q-row.on { background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent); box-shadow: inset 2px 0 0 var(--accent); }
+body[data-theme="neon"] .q-sec, body[data-theme="neon"] .q-enter { border-radius: 0; font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+
+/* Стекло: матовая «пилюля», как полоса вкладок */
+body[data-theme="glass"] .sbox { border-radius: 999px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(26px) saturate(1.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 14px 40px rgba(8,6,20,.28); padding-left: 22px; }
+body[data-theme="glass"] .search.focus .sbox { border-color: rgba(255,255,255,.35); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent), 0 18px 50px rgba(8,6,20,.35); }
+body[data-theme="glass"] #q { font-weight: 500; }
+body[data-theme="glass"] .s-key { border-radius: 99px; background: rgba(255,255,255,.08); }
+body[data-theme="glass"] .s-list { border-radius: 24px; background: color-mix(in srgb, var(--panel-solid) 78%, transparent); backdrop-filter: blur(30px) saturate(1.5); }
+body[data-theme="glass"] .q-row { border-radius: 16px; }
+body[data-theme="glass"] .q-row.on { background: rgba(255,255,255,.12); }
+
+/* Тишина: без коробки — только тонкая линия, которая наливается акцентом */
+body[data-theme="calm"] .sbox { height: 58px; padding: 0 2px; gap: 14px; }
+body[data-theme="calm"] .sbox::before, body[data-theme="calm"] .sbox::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
+body[data-theme="calm"] .sbox::after { height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .6s var(--ease); }
+body[data-theme="calm"] .search.focus .sbox::after { transform: scaleX(1); }
+body[data-theme="calm"] #q { font-size: 22px; font-weight: 300; letter-spacing: -.01em; }
+body[data-theme="calm"] .s-key { border-radius: 6px; }
+body[data-theme="calm"] .s-list { border-radius: 14px; }
+body[data-theme="calm"] .q-row { border-radius: 10px; }
+body[data-theme="calm"] .q-row.on { background: var(--field); }
+body[data-theme="calm"] .q-row.on .q-tx b { color: var(--accent); }
+body[data-theme="calm"].searching .item.hit .card { box-shadow: 0 0 0 1px var(--accent); }
+
+/* Карты: тёмная плашка с золотой рамкой-каймой, как у разделов; масть вместо лупы */
+body[data-theme="cards"] .sbox {
+  border-radius: calc(var(--radius) + 8px); border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 65%, rgba(0,0,0,.35));
+  box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--bg) 80%, #000), inset 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent), 0 12px 34px rgba(0,0,0,.45);
+  backdrop-filter: blur(6px); padding-left: 20px;
+}
+body[data-theme="cards"] .search.focus .sbox { box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--bg) 80%, #000), inset 0 0 0 5px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 30px color-mix(in srgb, var(--accent) 18%, transparent), 0 12px 34px rgba(0,0,0,.45); }
+body[data-theme="cards"] .s-ico { display: none; }
+body[data-theme="cards"] .s-pre { display: block; font-size: 18px; color: var(--accent); transition: transform .5s var(--spring); }
+body[data-theme="cards"] .s-pre::before { content: "♠"; }
+body[data-theme="cards"] .search.focus .s-pre { transform: rotateY(360deg); }
+body[data-theme="cards"] #q::placeholder { font-family: var(--display); font-style: italic; font-size: 17px; }
+body[data-theme="cards"] .s-key { border-radius: 4px; color: var(--accent); border-color: var(--line); }
+body[data-theme="cards"] .s-list { border-radius: 14px; box-shadow: inset 0 0 0 4px var(--panel-solid), inset 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent), 0 24px 60px rgba(0,0,0,.55); padding: 10px; }
+body[data-theme="cards"] .q-row { border-radius: 8px; }
+body[data-theme="cards"] .q-row.on { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+body[data-theme="cards"] .q-row.on .q-tx b { color: var(--accent); }
+body[data-theme="neon"].searching .item.hit { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 70%, transparent)); }
+body[data-theme="neon"].searching .item.hit .card { box-shadow: none; }

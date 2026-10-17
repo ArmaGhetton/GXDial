@@ -70,6 +70,12 @@ WHAT THE DIAL CAN DO
   ✕ — delete. Drag to reorder; drop a tile into another section, folder
   or onto a section tab.
 • Middle click or Ctrl+click a tile — open the site in a new tab.
+• Search — the bar above the sections. It searches Google and your
+  bookmarks at once: matching tiles light up, the rest fade out.
+  Just start typing anywhere on the page, or press "/". Arrows — pick
+  a result, Enter — open, Ctrl+Enter — open in a new tab, Esc — clear.
+  Type an address (e.g. github.com) to open it directly. You can turn
+  it off in Settings → "Other".
 • Settings (⚙ at the top right):
   – Language: Auto (browser language), Русский or English;
   – Theme: Neon / Glass / Calm / Cards (sets its own colors, which you

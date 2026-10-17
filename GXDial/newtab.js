@@ -8,7 +8,7 @@ const DEFAULTS = {
   theme: 'neon',
   cols: 5, w: 200, h: 116, gap: 20, radius: 14, fav: 20, font: 14, top: 110, secGap: 24,
   showTitles: true, ...THEMES.neon,
-  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto', cover: 'host'
+  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto', cover: 'host', search: true
 };
 const SIZE_KEYS = ['cols', 'w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'secGap'];
 const PX_KEYS = ['w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'blur', 'secGap'];
@@ -121,6 +121,7 @@ function applySettings() {
   b.classList.toggle('no-titles', !S.showTitles);
   b.classList.toggle('no-panels', !S.panels);
   b.classList.toggle('view-tabs', S.view === 'tabs');
+  b.classList.toggle('no-search', !S.search);
   document.querySelectorAll('.theme-btn').forEach(x => x.classList.toggle('on', x.dataset.themePick === S.theme));
   document.querySelectorAll('[data-seg="view"] button').forEach(x => x.classList.toggle('on', x.dataset.val === S.view));
   syncCoverPick();
@@ -266,6 +267,7 @@ function tileEl(loc, t, i) {
   a.href = t.url;
   a.title = t.url;
   a.draggable = true;
+  a.dataset.search = ((t.title || '') + ' ' + t.url).toLowerCase();
 
   a.append(el('span', 'ring'), el('span', 'ring'));
 
@@ -368,6 +370,7 @@ function folderTileEl(s, f, i) {
   const open = openFolders.has(f.id);
   const item = el('div', 'item folder' + (open ? ' open' : ''));
   item.draggable = true;
+  item.dataset.search = [f.name, ...f.tiles.map(t => (t.title || '') + ' ' + t.url)].join(' ').toLowerCase();
   item.append(el('span', 'ring'), el('span', 'ring'));
 
   // внутри лежат кнопки ✎ и ✕, поэтому сама карточка — не <button>, а фокусируемый блок
@@ -543,7 +546,7 @@ function openTile(a, t, e) {
     document.body.append(ov);
     setTimeout(go, 520);
   } else if (S.theme === 'glass') {
-    const card = a.querySelector('.card');
+    const card = a.querySelector('.card') || a;
     const r = card.getBoundingClientRect();
     const ov = el('div', 'fx-open glass');
     const media = card.querySelector('img.cover, .ph');
@@ -565,7 +568,7 @@ function openTile(a, t, e) {
     setTimeout(go, 470);
   } else if (S.theme === 'cards') {
     // карта переворачивается рубашкой вверх и раскрывается на весь экран
-    const card = a.querySelector('.card');
+    const card = a.querySelector('.card') || a;
     const r = card.getBoundingClientRect();
     const rad = getComputedStyle(card).borderRadius;
     const ov = el('div', 'fx-open cards');
