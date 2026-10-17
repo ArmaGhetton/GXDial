@@ -19,6 +19,7 @@ four themes and live animated backgrounds.
 - **Folders inside sections** — a folder looks like a tile with a 2×2 preview and unfolds right under its row. Drop a tile onto a folder to put it inside.
 - **Drag & drop everywhere** — reorder tiles, move them between sections, folders and tabs.
 - **Your own images on tiles** — from your computer or by URL, *cover* or *contain*.
+- **Covers for tiles without an image** — the site address, a big glowing icon, the site's own color, a unique generated pattern or a giant letter. The color is taken from the site's icon; each site gets its own pattern.
 - **Four themes**, each with its own fonts, animations and settings panel:
   - **Neon** — gaming HUD in the spirit of Opera GX: chamfered corners, glow, glitch.
   - **Glass** — frosted panels over your wallpaper, 3D tilt on hover.
@@ -37,6 +38,12 @@ four themes and live animated backgrounds.
 | ![Neon](docs/images/theme-neon.png) | ![Glass](docs/images/theme-glass.png) |
 | **Calm** | **Cards** |
 | ![Calm](docs/images/theme-calm.png) | ![Cards](docs/images/theme-cards.png) |
+
+### Covers for tiles without an image
+
+Icon · Site color · Pattern · Letter
+
+![Covers](docs/images/covers.png)
 
 | Folders | Tabs and settings |
 |:---:|:---:|

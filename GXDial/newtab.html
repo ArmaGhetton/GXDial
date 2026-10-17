@@ -76,6 +76,10 @@
           <input class="rng" type="range" data-key="h" min="40" max="320" step="5"></label>
         <label class="rl"><span class="rh">Скругление углов <output data-for="radius"></output></span>
           <input class="rng" type="range" data-key="radius" min="0" max="60" step="1"></label>
+        <div class="rl">Обложка без картинки
+          <div class="covers" id="coverPick"></div>
+          <p class="hint">Для плиток без своей картинки. Отдельной плитке можно выбрать другую в окне «Изменить».</p>
+        </div>
       </section>
 
       <section class="grp">
@@ -165,6 +169,15 @@
           <option value="cover">Заполнить плитку (обрезать края)</option>
           <option value="contain">Вписать целиком</option>
         </select></label>
+      <label class="rl">Обложка без картинки
+        <select id="fCover" class="field">
+          <option value="">Как в настройках</option>
+          <option value="host">Адрес сайта</option>
+          <option value="icon">Значок</option>
+          <option value="color">Цвет сайта</option>
+          <option value="pattern">Узор</option>
+          <option value="mono">Буква</option>
+        </select></label>
 
       <div class="actions">
         <button value="cancel" class="btn ghost" formnovalidate>Отмена</button>
@@ -175,6 +188,7 @@
 
   <script src="i18n.js"></script>
   <script src="fx.js"></script>
+  <script src="covers.js"></script>
   <script src="newtab.js"></script>
 </body>
 </html>

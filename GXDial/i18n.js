@@ -57,6 +57,9 @@ const EN = {
   'Откройте вручную: opera://settings/onStartup': 'Open manually: opera://settings/onStartup',
   'Новых закладок в этой папке нет': 'No new bookmarks in this folder',
   'Основное': 'Main',
+  'Обложка без картинки': 'Cover without image',
+  'Для плиток без своей картинки. Отдельной плитке можно выбрать другую в окне «Изменить».': 'For tiles without their own image. A single tile can use a different one in the “Edit” window.',
+  'Как в настройках': 'As in settings', 'Адрес сайта': 'Site address', 'Значок': 'Icon', 'Цвет сайта': 'Site color', 'Узор': 'Pattern', 'Буква': 'Letter', 'Цвет': 'Color',
   // живые фоны
   'Горизонт': 'Horizon', 'Соты': 'Hexes', 'Гиперпрыжок': 'Hyperjump',
   'Пятна': 'Blobs', 'Шёлк': 'Silk', 'Точки': 'Dots', 'Созвездия': 'Stars',

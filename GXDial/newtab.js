@@ -8,7 +8,7 @@ const DEFAULTS = {
   theme: 'neon',
   cols: 5, w: 200, h: 116, gap: 20, radius: 14, fav: 20, font: 14, top: 110, secGap: 24,
   showTitles: true, ...THEMES.neon,
-  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto'
+  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto', cover: 'host'
 };
 const SIZE_KEYS = ['cols', 'w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'secGap'];
 const PX_KEYS = ['w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'blur', 'secGap'];
@@ -123,6 +123,7 @@ function applySettings() {
   b.classList.toggle('view-tabs', S.view === 'tabs');
   document.querySelectorAll('.theme-btn').forEach(x => x.classList.toggle('on', x.dataset.themePick === S.theme));
   document.querySelectorAll('[data-seg="view"] button').forEach(x => x.classList.toggle('on', x.dataset.val === S.view));
+  syncCoverPick();
   document.querySelectorAll('[data-seg="lang"] button').forEach(x => x.classList.toggle('on', x.dataset.val === (S.lang || 'auto')));
   syncFx();
 }
@@ -144,6 +145,27 @@ function syncFx() {
     b.classList.toggle('on', +b.dataset.val === v);
   });
   if (window.FX) FX.set(S.theme, on, v);
+}
+// выбор обложки пустых плиток: мини-превью на первом сайте из закладок
+function syncCoverPick() {
+  const box = $('coverPick');
+  const sample = sections.flatMap(linksOf).find(x => !x.image) || { url: 'https://www.youtube.com/', title: 'YouTube' };
+  const key = sample.url + '|' + LANG + '|' + S.theme;
+  if (box.dataset.key !== key) {
+    box.dataset.key = key;
+    box.innerHTML = '';
+    COVER_STYLES.forEach(st => {
+      const b = el('button', 'cover-btn');
+      b.type = 'button';
+      b.dataset.val = st;
+      const pv = el('span', 'cvp');
+      pv.append(coverEl(sample, st));
+      b.append(pv, el('span', 'cvn', L(COVER_NAMES[st])));
+      b.onclick = () => { if (S.cover === st) return; S.cover = st; saveSettings(); syncCoverPick(); render(); };
+      box.append(b);
+    });
+  }
+  [...box.children].forEach(b => b.classList.toggle('on', b.dataset.val === (S.cover || 'host')));
 }
 function applyBg() {
   $('bg').style.backgroundImage = bgImage ? cssUrl(bgImage) : '';
@@ -174,7 +196,7 @@ function iconBtn(cls, icon, label, text) {
   b.title = L(label);
   return b;
 }
-function placeholder(t) { return el('div', 'ph', hostOf(t.url)); }
+function placeholder(t) { return coverEl(t, t.cover || S.cover); }
 function letterEl(t) { return el('div', 'letter', (t.title || hostOf(t.url)).charAt(0).toUpperCase()); }
 function favEl(t, px) {
   const img = el('img');
@@ -839,7 +861,11 @@ function setPreview() {
     img.onerror = () => { p.textContent = L('Не удалось загрузить картинку по ссылке'); };
     p.append(img);
   } else {
-    p.textContent = L('Нет изображения — на плитке будет адрес сайта');
+    // без картинки показываем, какой будет обложка
+    const style = $('fCover').value || S.cover;
+    const url = $('fUrl').value.trim();
+    if (style === 'host' || !url) p.textContent = L('Нет изображения — на плитке будет адрес сайта');
+    else p.append(coverEl({ url: normalizeUrl(url), title: $('fTitle').value.trim() }, style));
   }
 }
 function openEditor(loc, i) {
@@ -848,6 +874,7 @@ function openEditor(loc, i) {
   editLoc = loc;
   editIndex = i;
   const t = i < 0 ? null : getList(loc.sec, loc.folder)[i];
+  $('fCover').value = t && t.cover ? t.cover : '';
   $('editTitle').textContent = L(t ? 'Изменить закладку' : 'Новая закладка');
   $('fTitle').value = t ? t.title : '';
   $('fUrl').value = t ? t.url : '';
@@ -881,6 +908,9 @@ $('fImgFile').onchange = async e => {
 };
 $('fImgUrl').oninput = () => { draftImage = $('fImgUrl').value.trim() || null; setPreview(); };
 $('fFit').onchange = setPreview;
+$('fCover').onchange = setPreview;
+$('fUrl').addEventListener('input', setPreview);
+$('fTitle').addEventListener('input', setPreview);
 $('fImgClear').onclick = () => { draftImage = null; $('fImgUrl').value = ''; setPreview(); };
 
 $('editDlg').addEventListener('close', () => {
@@ -889,6 +919,7 @@ $('editDlg').addEventListener('close', () => {
   try { new URL(url); } catch { alert(L('Некорректный адрес')); return; }
   const item = { title: $('fTitle').value.trim(), url };
   if (draftImage) { item.image = draftImage; item.fit = $('fFit').value; }
+  if ($('fCover').value) item.cover = $('fCover').value;
   const [kind, sid, fid] = $('fSec').value.split(':');
   const to = { sec: sid, folder: kind === 'f' ? fid : null };
   const target = getList(to.sec, to.folder) || getList(editLoc.sec, editLoc.folder);
@@ -983,6 +1014,7 @@ function openPanel() {
   $('panel').classList.add('open');
   document.body.classList.add('panel-open');
   loadFolders();
+  syncCoverPick();
 }
 function closePanel() {
   $('panel').classList.remove('open');

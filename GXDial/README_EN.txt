@@ -76,6 +76,8 @@ WHAT THE DIAL CAN DO
     can tweak);
   – Sections: list or tabs, backgrounds, spacing;
   – Sizes of tiles, captions, grid and gaps;
+  – Cover without image: site address, icon, site color, pattern or letter
+    (a single tile can use its own in the "Edit" window);
   – Background: your own image from disk or by URL, dim, blur;
     live background when there is no image (several per theme);
   – Colors, import an Opera bookmarks folder as a section (subfolders

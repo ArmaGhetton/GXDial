@@ -895,3 +895,61 @@ body[data-theme="cards"] .preview { border-radius: 10px; }
 .tp-cards i:nth-child(2) { left: 26px; top: 11px; }
 .tp-cards i:nth-child(3) { left: 44px; transform: rotate(10deg); }
 .tp-cards i:nth-child(2)::after { content: "♠"; position: absolute; inset: 0; display: grid; place-items: center; color: #d4af37; font-size: 13px; font-style: normal; }
+
+/* ===== Обложки пустых плиток ===== */
+body .card > .ph.cv, .cvp > .ph.cv, .preview > .ph.cv { position: relative; padding: 0; overflow: hidden; --c: var(--accent); background: var(--tile); }
+.cv .cv-host {
+  position: absolute; left: 6px; right: 6px; bottom: 9%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: max(10px, calc(var(--h) * .085)); font-weight: 600; letter-spacing: 0; color: color-mix(in srgb, var(--text) 75%, transparent);
+}
+/* значок */
+body .ph.cv.cv-icon { background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--c) 50%, transparent), transparent 64%), color-mix(in srgb, var(--c) 12%, var(--tile)); }
+.cv-icon .cv-glow {
+  position: absolute; left: 50%; top: 40%; width: calc(var(--h) * .95); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, color-mix(in srgb, var(--c) 55%, transparent), transparent 35%, transparent 55%, color-mix(in srgb, var(--c) 35%, transparent), transparent 85%);
+  filter: blur(8px); opacity: .55; animation: cvSpin 9s linear infinite paused; transition: opacity .4s;
+}
+.item:hover .cv-icon .cv-glow { animation-play-state: running; opacity: .9; }
+.cv-icon .cv-ico {
+  position: absolute; left: 50%; top: 40%; width: calc(var(--h) * .34); height: calc(var(--h) * .34); translate: -50% -50%; object-fit: contain;
+  filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--c) 75%, transparent)); transition: scale .45s var(--spring);
+}
+.cv-icon .cv-letter { display: grid; place-items: center; font-size: calc(var(--h) * .3); font-weight: 700; color: var(--c); }
+.item:hover .cv-icon .cv-ico { scale: 1.14; }
+@keyframes cvSpin { to { rotate: 360deg; } }
+/* цвет сайта */
+body .ph.cv.cv-color { background: linear-gradient(140deg, color-mix(in srgb, var(--c) 80%, white) 0%, var(--c) 42%, color-mix(in srgb, var(--c) 45%, black) 100%); }
+.cv-color::before { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 90% at 0% 0%, rgba(255,255,255,.28), transparent 55%); pointer-events: none; }
+.cv-color .cv-mark {
+  position: absolute; right: -6%; bottom: -24%; width: calc(var(--h) * .95); height: calc(var(--h) * .95); object-fit: contain;
+  rotate: -14deg; opacity: .32; filter: grayscale(1) contrast(.7) brightness(2.4); transition: rotate .6s var(--ease), scale .6s var(--ease);
+}
+.item:hover .cv-color .cv-mark { rotate: -4deg; scale: 1.06; }
+.cv-color .cv-host { left: 10px; right: 30%; bottom: 10px; text-align: left; color: #fff; font-weight: 700; text-shadow: 0 1px 10px rgba(0,0,0,.4); }
+/* узор */
+.cv-pattern .cv-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: transform 1.4s var(--ease); }
+.item:hover .cv-pattern .cv-art { transform: scale(1.1) rotate(1deg); }
+.cv-pattern .cv-chip {
+  position: absolute; left: 8px; bottom: 8px; max-width: calc(100% - 16px); padding: 3px 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-radius: calc(var(--radius) * .6); background: color-mix(in srgb, var(--tile) 72%, transparent); backdrop-filter: blur(6px);
+  font-size: max(10px, calc(var(--h) * .08)); font-weight: 600; color: var(--text);
+}
+/* буква */
+body .ph.cv.cv-mono { background: linear-gradient(160deg, color-mix(in srgb, var(--c) 22%, var(--tile)), var(--tile) 70%); }
+.cv-mono .cv-big {
+  position: absolute; right: 6%; bottom: -30%; font-size: calc(var(--h) * 1.3); font-weight: 800; line-height: 1;
+  background: linear-gradient(170deg, var(--c) 10%, color-mix(in srgb, var(--c) 15%, transparent) 75%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  transition: transform .7s var(--ease);
+}
+.item:hover .cv-mono .cv-big { transform: translateY(-8%) rotate(-3deg); }
+.cv-mono .cv-host { left: 10px; right: 10px; top: 9px; bottom: auto; text-align: left; }
+/* выбор обложки в настройках */
+.covers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 8px 0 2px; }
+.cover-btn { display: flex; flex-direction: column; gap: 5px; align-items: stretch; padding: 4px; border: 0; cursor: pointer; background: transparent; color: var(--muted); font: inherit; font-size: 11px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .25s, color .25s; }
+.cover-btn.on { color: var(--text); box-shadow: inset 0 0 0 2px var(--accent); }
+.cvp { --h: 40px; --radius: 4px; display: block; height: 40px; overflow: hidden; border-radius: 5px; background: var(--tile); }
+.cvp > .ph { font-size: 8px; padding: 2px; }
+.cvp .cv-host, .cvp .cv-chip { display: none; }
+body[data-theme="neon"] .cover-btn, body[data-theme="neon"] .cvp { border-radius: 0; }
+.preview > .ph.cv { --h: 140px; width: 100%; height: 100%; }
+.preview:has(.cv) { padding: 0; }
