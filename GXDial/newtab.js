@@ -8,7 +8,7 @@ const DEFAULTS = {
   theme: 'neon',
   cols: 5, w: 200, h: 116, gap: 20, radius: 14, fav: 20, font: 14, top: 110, secGap: 24,
   showTitles: true, ...THEMES.neon,
-  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto', cover: 'host', search: true
+  dim: 30, blur: 0, anim: true, fxv: { neon: 0, glass: 0, calm: 0, cards: 0 }, replaceStart: true, view: 'list', panels: true, active: null, lang: 'auto', cover: 'host', search: true, freq: true, visitBadge: true, clock: true, clockSec: false, weather: null, units: 'c'
 };
 const SIZE_KEYS = ['cols', 'w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'secGap'];
 const PX_KEYS = ['w', 'h', 'gap', 'radius', 'fav', 'font', 'top', 'blur', 'secGap'];
@@ -61,7 +61,7 @@ const linksOf = s => s.tiles.flatMap(t => isFolder(t) ? t.tiles : [t]);
 
 // ---------- хранение ----------
 async function load() {
-  const data = await chrome.storage.local.get(['settings', 'sections', 'tiles', 'bgImage']);
+  const data = await chrome.storage.local.get(['settings', 'sections', 'tiles', 'bgImage', 'visits']);
   S = { ...DEFAULTS, ...(data.settings || {}) };
   if (!THEMES[S.theme]) S.theme = 'neon';
   applyLang(S.lang);
@@ -76,6 +76,7 @@ async function load() {
     if (data.tiles) chrome.storage.local.remove('tiles');
   }
   bgImage = data.bgImage || null;
+  visits = data.visits || {};
   applySettings();
   applyBg();
   fillForm();
@@ -122,6 +123,8 @@ function applySettings() {
   b.classList.toggle('no-panels', !S.panels);
   b.classList.toggle('view-tabs', S.view === 'tabs');
   b.classList.toggle('no-search', !S.search);
+  b.classList.toggle('show-visits', !!S.visitBadge);
+  if (typeof syncClock === 'function') syncClock();
   document.querySelectorAll('.theme-btn').forEach(x => x.classList.toggle('on', x.dataset.themePick === S.theme));
   document.querySelectorAll('[data-seg="view"] button').forEach(x => x.classList.toggle('on', x.dataset.val === S.view));
   syncCoverPick();
@@ -289,6 +292,9 @@ function tileEl(loc, t, i) {
   drop.append(el('span', 'dl'));
   card.append(drop);
 
+  const seen = visitsOf(t.url);
+  if (seen) card.append(visitBadge(seen));
+
   const tools = el('div', 'tools');
   const edit = iconBtn('', IC.pen, 'Изменить');
   edit.onclick = e => { e.preventDefault(); openEditor(loc, i); };
@@ -305,9 +311,11 @@ function tileEl(loc, t, i) {
   cap.append(favEl(t), el('span', 'name', t.title || hostOf(t.url)), el('span', 'host-s', hostOf(t.url)));
   a.append(cap);
 
+  a.addEventListener('auxclick', e => { if (e.button === 1 && !e.target.closest('.tools')) bumpVisit(t.url); });   // колёсико — новая вкладка
   a.addEventListener('click', e => {
-    if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
     if (e.target.closest('.tools')) return;
+    if (!e.defaultPrevented && (e.ctrlKey || e.metaKey || e.shiftKey)) bumpVisit(t.url);   // открыли в новой вкладке/окне
+    if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     openTile(a, t, e);
   });
@@ -526,6 +534,7 @@ function deleteFolder(s, f) {
 let opening = false;
 function openTile(a, t, e) {
   if (opening) return;
+  bumpVisit(t.url);
   const go = () => { location.href = t.url; };
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return go();
   opening = true;
@@ -663,7 +672,9 @@ function sectionEl(s, n) {
   ren.onclick = () => startRename(title, s);
   const del = iconBtn('st st-del', IC.trash, 'Удалить раздел', 'Удалить');
   del.onclick = () => deleteSection(s);
-  tools.append(add, fold, ren, del);
+  const srt = iconBtn('st st-sort', IC_V.sort, 'Сортировать по посещениям', 'По посещениям');
+  srt.onclick = () => sortByVisits(s);
+  tools.append(add, fold, srt, ren, del);
 
   head.append(handle, chev, num, title, count, mini, line, tools);
   box.append(head);
@@ -790,6 +801,8 @@ function placeIndicator(instant) {
 
 function render() {
   root.innerHTML = '';
+  const fq = freqEl();
+  if (fq) root.append(fq);
   if (S.view === 'tabs') {
     if (!secById(S.active)) S.active = sections[0] ? sections[0].id : null;
     root.append(tabBar());
@@ -1032,6 +1045,7 @@ document.addEventListener('keydown', e => {
   else if (openFolders.size && !document.activeElement.isContentEditable) { openFolders.clear(); render(); }
 });
 
+$('resetVisits').onclick = resetVisits;
 $('resetBtn').onclick = () => {
   for (const k of SIZE_KEYS) S[k] = DEFAULTS[k];
   S.radius = THEMES[S.theme].radius;

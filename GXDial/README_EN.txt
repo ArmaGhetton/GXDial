@@ -70,12 +70,24 @@ WHAT THE DIAL CAN DO
   ✕ — delete. Drag to reorder; drop a tile into another section, folder
   or onto a section tab.
 • Middle click or Ctrl+click a tile — open the site in a new tab.
+• Visit counter — counts how many times each bookmark was opened
+  (click, middle click or search). The number is shown next to the
+  title, the most visited ones gather in a "Most visited" row above the
+  sections, and the "By visits" button in a section header sorts its
+  tiles by popularity (folders stay in place). Settings → "Visits".
 • Search — the bar above the sections. It searches Google and your
   bookmarks at once: matching tiles light up, the rest fade out.
   Just start typing anywhere on the page, or press "/". Arrows — pick
   a result, Enter — open, Ctrl+Enter — open in a new tab, Esc — clear.
   Type an address (e.g. github.com) to open it directly. You can turn
   it off in Settings → "Other".
+• Clock, date and weather — above the search bar, styled for each theme.
+  Seconds are optional. Weather comes from free open services (Open-Meteo, wttr.in, Met Norway): pick a city in
+  Settings → "Clock & weather", with °C / °F right there. The only thing
+  sent from the browser is the coordinates of the chosen city (and the city
+  name when you search for a city). Without internet the clock still works,
+  and the weather shows the last data it received. To turn weather off,
+  remove the city in settings.
 • Settings (⚙ at the top right):
   – Language: Auto (browser language), Русский or English;
   – Theme: Neon / Glass / Calm / Cards (sets its own colors, which you

@@ -62,6 +62,19 @@ const EN = {
   'Как в настройках': 'As in settings', 'Адрес сайта': 'Site address', 'Значок': 'Icon', 'Цвет сайта': 'Site color', 'Узор': 'Pattern', 'Буква': 'Letter', 'Цвет': 'Color',
   'Поиск в Google или по закладкам': 'Search Google or your bookmarks', 'Поиск': 'Search',
   'Найти в Google': 'Search Google', 'Открыть': 'Open', 'Строка поиска Google': 'Google search bar',
+  'Посещения': 'Visits', 'Блок «Часто открываю»': '“Most visited” row', 'Число посещений на плитках': 'Visit count on tiles',
+  'Считается каждое открытие закладки: щелчком, колёсиком, через поиск. Порядок в разделе можно выстроить кнопкой «По посещениям» в заголовке раздела.':
+    'Every time a bookmark is opened counts: click, middle click or search. Use the “By visits” button in a section header to sort it.',
+  'Сбросить счётчик': 'Reset counter', 'Сбросить счётчик посещений у всех закладок?': 'Reset the visit counter for all bookmarks?',
+  'Часто открываю': 'Most visited', 'Скрыть блок «Часто открываю»': 'Hide the “Most visited” row', 'Открыто': 'Opened',
+  'Сортировать по посещениям': 'Sort by visits', 'По посещениям': 'By visits',
+  'Часы и погода': 'Clock & weather', 'Часы и дата': 'Clock and date', 'Секунды': 'Seconds', 'Город для погоды': 'City for weather',
+  'Например, Москва': 'e.g. London', 'Найти': 'Find', 'Сейчас': 'Now', 'Ищу…': 'Searching…', 'Город не найден': 'City not found',
+  'Нет связи с сервисом погоды': 'Can’t reach the weather service',
+  'Выбрать город для погоды': 'Pick a city for weather', 'Погода недоступна': 'Weather unavailable',
+  'Погода — из открытых сервисов погоды, без регистрации и ключей. Обновляется раз в 30 минут. Щелчок по погоде открывает подробный прогноз.':
+    'Weather comes from open weather services — no sign-up or keys. Updates every 30 minutes. Click the weather for a detailed forecast.',
+  'Ощущается как': 'Feels like', 'Ветер': 'Wind', 'м/с': 'm/s', 'Днём': 'Day', 'Ночью': 'Night',
   // живые фоны
   'Горизонт': 'Horizon', 'Соты': 'Hexes', 'Гиперпрыжок': 'Hyperjump',
   'Пятна': 'Blobs', 'Шёлк': 'Silk', 'Точки': 'Dots', 'Созвездия': 'Stars',

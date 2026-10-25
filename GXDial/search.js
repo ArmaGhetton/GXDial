@@ -77,7 +77,7 @@ function activate(i, newTab) {
   const it = qItems[i];
   if (!it) return;
   const url = it.kind === 'web' ? (it.open ? normalizeUrl(it.q) : GOOGLE(it.q)) : it.t.url;
-  if (newTab) { chrome.tabs.create({ url, active: false }); return; }
+  if (newTab) { if (it.kind === 'bm') bumpVisit(url); chrome.tabs.create({ url, active: false }); return; }
   qList.hidden = true;
   if (it.kind === 'bm') {
     // если плитка видна на странице — открываем с анимацией темы прямо с неё

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_name__",
   "short_name": "GX Dial",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "__MSG_description__",
   "default_locale": "en",
   "permissions": [
@@ -12,6 +12,12 @@
     "bookmarks",
     "favicon",
     "alarms"
+  ],
+  "host_permissions": [
+    "https://api.open-meteo.com/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://wttr.in/*",
+    "https://api.met.no/*"
   ],
   "background": {
     "service_worker": "background.js"

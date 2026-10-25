@@ -30,7 +30,7 @@ four themes and live animated backgrounds.
 - **Theme-specific transitions** when you open a site: glitch, glass zoom, ink wipe, card flip.
 - **Fully adjustable** — tile size, corner radius, grid columns and gaps, captions, colors, wallpaper with dim and blur.
 - **Import** an Opera bookmarks folder as a section (subfolders become folders).
-- Works offline: all fonts are bundled, nothing is loaded from the internet.
+- Works offline: all fonts are bundled. The only network request is the optional weather widget (see Privacy).
 
 ## Themes
 
@@ -79,7 +79,7 @@ Replace the files in your `GXDial` folder with the new ones and press the reload
 
 - **The address bar shows `chrome-extension://…`.** Opera doesn't let extensions hide it or leave it empty, the same as with every other new-tab extension in Opera. Press `F8` or `Ctrl+L` to type an address right away.
 - **Other browsers.** GX Dial is made for Opera GX, but it also runs in Chrome and other Chromium-based browsers through *Load unpacked*.
-- **Privacy.** Everything — bookmarks, images, settings — is stored only in your browser (`chrome.storage.local`). The extension sends nothing anywhere and has no analytics.
+- **Privacy.** Everything — bookmarks, images, settings, visit counts — is stored only in your browser (`chrome.storage.local`). No analytics. The one exception is the optional weather widget: it asks a free open weather service (Open-Meteo, wttr.in or Met Norway) for the weather at the coordinates of the city you picked (and sends the city name when you search for it). Nothing else leaves your browser. Remove the city in settings to switch it off.
 
 ### Permissions
 

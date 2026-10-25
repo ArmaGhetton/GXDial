@@ -12,6 +12,14 @@
   <div id="dim"></div>
   <div id="logo" aria-hidden="true"><b>GX</b><span>DIAL</span></div>
 
+  <div id="clock" class="clock" hidden>
+    <div class="c-time"><span class="c-hm"></span></div>
+    <div class="c-row">
+      <span class="c-date"></span>
+      <a class="c-wx" hidden><span class="wx-ic"></span><b class="wx-t"></b><span class="wx-d"></span><span class="wx-city"></span></a>
+    </div>
+  </div>
+
   <form id="search" class="search" role="search" autocomplete="off">
     <div class="sbox">
       <span class="s-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
@@ -143,6 +151,27 @@
       </section>
 
       <section class="grp">
+        <h3>Часы и погода</h3>
+        <label class="row">Часы и дата <input class="sw" type="checkbox" data-key="clock"></label>
+        <label class="row">Секунды <input class="sw" type="checkbox" data-key="clockSec"></label>
+        <div class="rl">Город для погоды
+          <span class="row2"><input id="wxCity" class="field" type="text" placeholder="Например, Москва"><button id="wxFind" class="btn narrow" type="button">Найти</button></span>
+          <div id="wxResults" class="wx-results"></div>
+          <p id="wxNow" class="hint wx-now" hidden></p>
+        </div>
+        <div class="seg" data-seg="units"><button data-val="c" type="button">°C</button><button data-val="f" type="button">°F</button></div>
+        <p class="hint">Погода — из открытых сервисов погоды, без регистрации и ключей. Обновляется раз в 30 минут. Щелчок по погоде открывает подробный прогноз.</p>
+      </section>
+
+      <section class="grp">
+        <h3>Посещения</h3>
+        <label class="row">Блок «Часто открываю» <input class="sw" type="checkbox" data-key="freq"></label>
+        <label class="row">Число посещений на плитках <input class="sw" type="checkbox" data-key="visitBadge"></label>
+        <p class="hint">Считается каждое открытие закладки: щелчком, колёсиком, через поиск. Порядок в разделе можно выстроить кнопкой «По посещениям» в заголовке раздела.</p>
+        <button id="resetVisits" class="btn ghost" type="button">Сбросить счётчик</button>
+      </section>
+
+      <section class="grp">
         <h3>Прочее</h3>
         <label class="row">Строка поиска Google <input class="sw" type="checkbox" data-key="search"></label>
         <label class="row">Заменять стартовую страницу Opera <input class="sw" type="checkbox" data-key="replaceStart"></label>
@@ -200,7 +229,9 @@
   <script src="i18n.js"></script>
   <script src="fx.js"></script>
   <script src="covers.js"></script>
+  <script src="visits.js"></script>
   <script src="newtab.js"></script>
   <script src="search.js"></script>
+  <script src="clock.js"></script>
 </body>
 </html>
