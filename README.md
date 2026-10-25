@@ -18,6 +18,8 @@ four themes and live animated backgrounds.
 - **Sections** — group your bookmarks; show them as a list or as tabs. Rename, collapse, reorder by drag & drop.
 - **Folders inside sections** — a folder looks like a tile with a 2×2 preview and unfolds right under its row. Drop a tile onto a folder to put it inside.
 - **Search bar** — searches Google and your bookmarks at once: just start typing anywhere, matching tiles light up. Type an address to open it directly. Styled to match each theme.
+- **Visit counter** — how many times each bookmark has been opened. The *Most visited* row above the sections shows your favourites, and the *By visits* button in a section header sorts it by frequency. Can be turned off in settings.
+- **Clock, date and weather** above the search bar, styled for each theme. Weather is optional and comes from open services (see Privacy).
 - **Drag & drop everywhere** — reorder tiles, move them between sections, folders and tabs.
 - **Your own images on tiles** — from your computer or by URL, *cover* or *contain*.
 - **Covers for tiles without an image** — the site address, a big glowing icon, the site's own color, a unique generated pattern or a giant letter. The color is taken from the site's icon; each site gets its own pattern.
@@ -43,6 +45,10 @@ four themes and live animated backgrounds.
 ### Search
 
 ![Search](docs/images/search.png)
+
+### Visit counter
+
+![Visit counter](docs/images/visits.png)
 
 ### Covers for tiles without an image
 
